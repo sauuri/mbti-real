@@ -11,107 +11,134 @@
   <meta property="og:url" content="https://sauuri.github.io/mbti-real/" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="내 MBTI 진짜 맞아? 🧬" />
-  <meta name="twitter:description" content="행동 패턴 12개로 주장하는 MBTI랑 실제가 일치하는지 검증해드립니다" />
-  <meta name="twitter:image" content="https://sauuri.github.io/mbti-real/og.png" />
   <title>내 MBTI 진짜 맞아?</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       min-height: 100vh;
-      background: #070d1a;
+      background: #020d14;
       font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
       color: #ddeeff;
       overflow-x: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
     }
-
-    /* 배경 grid 효과 */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background-image:
-        linear-gradient(#0cf2ff08 1px, transparent 1px),
-        linear-gradient(90deg, #0cf2ff08 1px, transparent 1px);
+        linear-gradient(#0cf2ff06 1px, transparent 1px),
+        linear-gradient(90deg, #0cf2ff06 1px, transparent 1px);
       background-size: 40px 40px;
+      pointer-events: none; z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse at 70% 10%, #0cf2ff14 0%, transparent 55%),
+                  radial-gradient(ellipse at 15% 90%, #7c3aed14 0%, transparent 55%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .particle {
+      position: absolute; opacity: 0;
+      animation: floatUp var(--dur, 8s) var(--delay, 0s) infinite ease-in;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.4; }
+      90%  { opacity: 0.12; }
+      100% { transform: translateY(-10vh) scale(1) rotate(360deg); opacity: 0; }
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(0) rotate(0); opacity: 1; }
+      100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+    }
+
+    .container { position: relative; z-index: 1; width: 100%; max-width: 500px; padding: 20px; }
+
+    /* ── INTRO CARD ── */
+    .intro-card {
+      background: #040f18;
+      border: 1px solid #1a3050;
+      border-radius: 28px;
+      padding: 44px 28px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .intro-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, #0cf2ff1e 0%, transparent 60%);
       pointer-events: none;
-      z-index: 0;
     }
-
-    .orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(100px);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .orb-1 { width: 500px; height: 500px; background: #0cf2ff18; top: -150px; right: -150px; animation: drift 12s ease-in-out infinite; }
-    .orb-2 { width: 400px; height: 400px; background: #7c3aed18; bottom: -100px; left: -100px; animation: drift 15s ease-in-out infinite reverse; }
-    @keyframes drift {
-      0%, 100% { transform: translate(0, 0); }
-      50% { transform: translate(40px, 30px); }
-    }
-
-    .container {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 500px;
-      padding: 20px;
-    }
-
-    /* ── INTRO ── */
-    .intro { text-align: center; padding: 40px 20px; }
-    .intro .icon { font-size: 72px; display: block; margin-bottom: 20px; animation: spin 4s linear infinite; }
+    .intro-icon { font-size: 72px; display: block; margin-bottom: 20px; animation: spin 4s linear infinite; }
     @keyframes spin {
-      0% { transform: rotateY(0); } 50% { transform: rotateY(180deg); } 100% { transform: rotateY(360deg); }
+      0%   { transform: rotateY(0deg); }
+      50%  { transform: rotateY(180deg); }
+      100% { transform: rotateY(360deg); }
     }
-    .intro h1 {
-      font-size: 30px; font-weight: 800; margin-bottom: 10px;
+    .intro-title {
+      font-size: 30px; font-weight: 800; margin-bottom: 6px;
       background: linear-gradient(135deg, #0cf2ff, #38bdf8);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .intro h2 { font-size: 15px; color: #4a7a99; font-weight: 400; margin-bottom: 14px; }
-    .intro p { font-size: 15px; color: #6a9abb; line-height: 1.8; margin-bottom: 32px; }
-    .intro p strong { color: #0cf2ff; }
+    .intro-tagline { font-size: 13px; color: #1a4060; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 20px; }
+    .intro-desc { font-size: 15px; color: #3a6a88; line-height: 1.85; margin-bottom: 16px; }
+    .intro-desc strong { color: #0cf2ff; }
+    .intro-note {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #0a1e2e; border: 1px solid #1a3050;
+      border-radius: 50px; padding: 6px 16px;
+      font-size: 12px; color: #2a5070;
+      margin-bottom: 30px;
+    }
+    .start-btn {
+      background: linear-gradient(135deg, #0a3a5a, #0a2a5a);
+      border: 1.5px solid #0cf2ff66;
+      color: #0cf2ff;
+      padding: 16px 52px; border-radius: 50px;
+      font-size: 18px; font-weight: 700; cursor: pointer;
+      transition: all 0.3s; font-family: inherit;
+      box-shadow: 0 6px 24px #0cf2ff22;
+    }
+    .start-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 32px #0cf2ff44; border-color: #0cf2ff; }
+    .start-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ── SCREEN ── */
+    .screen { display: none; }
+    .screen.active { display: block; }
 
     /* ── CLAIM SCREEN ── */
-    .claim { display: none; }
-    .claim.active { display: block; }
-    .claim-title { text-align: center; margin-bottom: 28px; }
-    .claim-title h2 {
-      font-size: 22px; font-weight: 800;
+    .claim-card {
+      background: #040f18;
+      border: 1px solid #1a3050;
+      border-radius: 24px;
+      padding: 32px 26px;
+      position: relative; overflow: hidden;
+    }
+    .claim-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, #0cf2ff14 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .claim-card h2 {
+      font-size: 22px; font-weight: 800; margin-bottom: 8px;
       background: linear-gradient(135deg, #0cf2ff, #38bdf8);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-bottom: 8px;
     }
-    .claim-title p { font-size: 14px; color: #4a7a99; }
+    .claim-card p { font-size: 14px; color: #2a5070; margin-bottom: 24px; }
 
-    .mbti-card {
-      background: #0c1628;
-      border: 1px solid #1a3050;
-      border-radius: 20px;
-      padding: 28px;
-      backdrop-filter: blur(10px);
-    }
-
-    .dimension {
-      margin-bottom: 20px;
-    }
-    .dim-label { font-size: 12px; color: #3a6080; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; }
+    .dimension { margin-bottom: 20px; }
+    .dim-label { font-size: 12px; color: #1a4060; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; }
     .toggle-row {
       display: grid;
       grid-template-columns: 1fr 40px 1fr;
-      gap: 8px;
-      align-items: center;
+      gap: 8px; align-items: center;
     }
     .toggle-btn {
-      background: #111e30;
+      background: #0a1828;
       border: 1.5px solid #1a3050;
       border-radius: 12px;
       padding: 14px 10px;
@@ -120,14 +147,14 @@
       font-family: inherit;
       text-align: center;
     }
-    .toggle-btn .t-letter { font-size: 22px; font-weight: 800; color: #2a5070; display: block; margin-bottom: 3px; }
-    .toggle-btn .t-name { font-size: 11px; color: #2a4060; }
+    .toggle-btn .t-letter { font-size: 22px; font-weight: 800; color: #1a3a50; display: block; margin-bottom: 3px; }
+    .toggle-btn .t-name  { font-size: 11px; color: #1a3050; }
     .toggle-btn.active {
       background: linear-gradient(135deg, #0a2a3a, #0a1e3a);
       border-color: #0cf2ff;
     }
     .toggle-btn.active .t-letter { color: #0cf2ff; }
-    .toggle-btn.active .t-name { color: #4aaabb; }
+    .toggle-btn.active .t-name  { color: #3a8aaa; }
     .toggle-vs { text-align: center; color: #1a3050; font-size: 13px; font-weight: 700; }
 
     .mbti-preview {
@@ -138,148 +165,135 @@
       border: 1px solid #1a3050;
       border-radius: 14px;
     }
-    .mbti-preview-label { font-size: 11px; color: #2a5070; font-weight: 700; letter-spacing: 1px; margin-bottom: 6px; }
+    .mbti-preview-label { font-size: 11px; color: #1a4060; font-weight: 700; letter-spacing: 1px; margin-bottom: 6px; }
     .mbti-preview-val {
       font-size: 36px; font-weight: 900; letter-spacing: 6px;
       background: linear-gradient(135deg, #0cf2ff, #38bdf8);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
-    /* ── QUIZ ── */
-    .quiz { display: none; }
-    .quiz.active { display: block; }
+    .claim-submit { text-align: center; margin-top: 24px; }
 
-    .progress-wrap { margin-bottom: 20px; }
-    .progress-info { display: flex; justify-content: space-between; margin-bottom: 8px; }
-    .progress-label { font-size: 12px; color: #2a6080; font-weight: 700; letter-spacing: 0.5px; }
-    .progress-count { font-size: 12px; color: #2a5070; }
-    .progress-bar { width: 100%; height: 3px; background: #0c1e2e; border-radius: 2px; overflow: hidden; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, #0cf2ff, #38bdf8); border-radius: 2px; transition: width 0.4s ease; }
-    .dim-indicator {
-      display: flex; gap: 6px; margin-top: 10px;
+    /* ── QUIZ ── */
+    .quiz-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .back-btn {
+      background: #0a1828; border: 1.5px solid #1a3050; border-radius: 12px;
+      padding: 8px 14px; font-size: 18px; cursor: pointer;
+      transition: all 0.2s; flex-shrink: 0; color: #2a5070; font-family: inherit;
+      line-height: 1;
     }
+    .back-btn:hover { border-color: #0cf2ff; color: #0cf2ff; }
+    .back-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .progress-wrap { flex: 1; }
+    .progress-info { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .progress-label { font-size: 12px; color: #2a5070; font-weight: 700; }
+    .progress-count { font-size: 12px; color: #2a5070; }
+    .progress-bar { width: 100%; height: 4px; background: #0a1828; border-radius: 2px; overflow: hidden; }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, #0cf2ff, #38bdf8);
+      border-radius: 2px; transition: width 0.4s ease;
+      box-shadow: 0 0 8px #0cf2ff55;
+    }
+
+    .dim-indicator { display: flex; gap: 5px; margin-top: 10px; }
     .dim-dot {
       flex: 1; height: 3px; border-radius: 2px;
-      background: #0c1e2e;
+      background: #0a1828;
       transition: background 0.3s;
     }
-    .dim-dot.done { background: #0cf2ff55; }
-    .dim-dot.active { background: #0cf2ff; }
+    .dim-dot.done   { background: #0cf2ff44; }
+    .dim-dot.active { background: #0cf2ff; box-shadow: 0 0 4px #0cf2ff; }
 
     .question-card {
-      background: #0c1628;
+      background: #040f18;
       border: 1px solid #1a3050;
       border-radius: 24px;
       padding: 32px 26px;
+      box-shadow: 0 8px 40px #0cf2ff08;
       animation: slideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     @keyframes slideIn {
       from { opacity: 0; transform: translateX(30px) scale(0.97); }
-      to { opacity: 1; transform: translateX(0) scale(1); }
+      to   { opacity: 1; transform: translateX(0)   scale(1);    }
     }
     .q-emoji { font-size: 38px; display: block; margin-bottom: 14px; }
-    .q-num { font-size: 11px; font-weight: 700; color: #0cf2ff88; letter-spacing: 1px; margin-bottom: 8px; }
+    .q-num  { font-size: 11px; font-weight: 700; color: #0cf2ff88; letter-spacing: 1px; margin-bottom: 8px; }
     .q-text { font-size: 19px; font-weight: 700; line-height: 1.5; margin-bottom: 24px; color: #cce8ff; }
-
     .options { display: flex; flex-direction: column; gap: 10px; }
     .option-btn {
       background: #0a1828;
       border: 1.5px solid #1a3050;
       border-radius: 14px;
       padding: 14px 16px;
-      text-align: left;
-      cursor: pointer;
+      text-align: left; cursor: pointer;
       transition: all 0.2s;
       display: flex; align-items: center; gap: 12px;
-      font-size: 15px; color: #8ab4cc;
-      font-family: inherit;
+      font-size: 15px; color: #4a7a99; font-family: inherit;
     }
-    .option-btn:hover { background: #0d1e30; border-color: #0cf2ff; color: #cce8ff; transform: translateX(4px); }
+    .option-btn:hover   { background: #0d1e30; border-color: #0cf2ff; color: #cce8ff; transform: translateX(4px); }
     .option-btn.selected { background: linear-gradient(135deg, #0a2a3a, #0a1e3a); border-color: #0cf2ff; color: white; }
     .option-icon { font-size: 22px; flex-shrink: 0; }
 
     /* ── RESULT ── */
-    .result { display: none; }
-    .result.active { display: block; }
-
     .result-card {
-      background: #0c1628;
+      background: #040f18;
       border: 1px solid #1a3050;
       border-radius: 24px;
-      padding: 36px 26px;
-      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      padding: 32px 26px;
+      box-shadow: 0 8px 40px #0cf2ff08;
     }
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(0.85); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .result-header { text-align: center; margin-bottom: 28px; }
-    .result-emoji { font-size: 64px; display: block; margin-bottom: 16px; animation: bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both; }
-    @keyframes bounce { from { transform: scale(0); } to { transform: scale(1); } }
-
+    .result-hero { text-align: center; margin-bottom: 24px; }
+    .result-emoji { font-size: 72px; display: block; margin-bottom: 16px; animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both; }
+    @keyframes popIn { from { transform: scale(0) rotate(-10deg); } to { transform: scale(1) rotate(0); } }
     .verdict-badge {
       display: inline-block; padding: 6px 20px; border-radius: 50px;
-      font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
-      margin-bottom: 14px;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 14px;
     }
 
     .mbti-compare {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      margin-bottom: 24px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; margin-bottom: 24px;
     }
     .mbti-box { text-align: center; }
-    .mbti-box-label { font-size: 11px; color: #2a6080; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; }
-    .mbti-box-val {
-      font-size: 34px; font-weight: 900; letter-spacing: 4px;
-    }
-    .mbti-box-val.claimed { color: #2a6080; }
-    .mbti-box-val.actual {
+    .mbti-box-label { font-size: 11px; color: #1a4060; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .mbti-box-val { font-size: 34px; font-weight: 900; letter-spacing: 4px; }
+    .mbti-box-val.claimed { color: #1a4060; }
+    .mbti-box-val.actual  {
       background: linear-gradient(135deg, #0cf2ff, #38bdf8);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .compare-arrow { font-size: 28px; color: #1a4060; }
+    .compare-arrow { font-size: 28px; color: #1a3050; }
 
-    .dim-results {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px;
-    }
+    .dim-results { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
     .dim-result-box {
-      background: #0a1828;
-      border: 1px solid #1a3050;
-      border-radius: 14px;
-      padding: 14px 12px;
-      text-align: center;
+      background: #0a1828; border: 1px solid #1a3050;
+      border-radius: 14px; padding: 14px 12px; text-align: center;
     }
-    .dim-result-box .dr-dim { font-size: 11px; color: #2a5070; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .dim-result-box .dr-dim     { font-size: 11px; color: #2a5070; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; }
     .dim-result-box .dr-letters { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
-    .dim-result-box .dr-match { font-size: 11px; font-weight: 700; }
+    .dim-result-box .dr-match   { font-size: 11px; font-weight: 700; }
     .match-yes .dr-letters { color: #0cf2ff; }
-    .match-yes .dr-match { color: #0cf2ff88; }
-    .match-no .dr-letters { color: #f87171; }
-    .match-no .dr-match { color: #f8717188; }
+    .match-yes .dr-match   { color: #0cf2ff88; }
+    .match-no  .dr-letters { color: #f87171; }
+    .match-no  .dr-match   { color: #f8717188; }
 
     .mbti-desc {
       background: linear-gradient(135deg, #0a1e30, #0a1428);
       border: 1px solid #0cf2ff22;
-      border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 22px;
+      border-radius: 16px; padding: 18px; margin-bottom: 22px;
     }
-    .mbti-desc-title { font-size: 11px; color: #0cf2ff88; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .mbti-desc-title    { font-size: 11px; color: #0cf2ff88; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px; }
     .mbti-desc-nickname { font-size: 16px; font-weight: 800; color: #0cf2ff; margin-bottom: 6px; }
-    .mbti-desc-text { font-size: 14px; color: #6a9abb; line-height: 1.7; }
+    .mbti-desc-text     { font-size: 14px; color: #4a7a99; line-height: 1.75; }
 
     .verdict-text {
-      font-size: 14px; color: #6a9abb; line-height: 1.8;
+      font-size: 14px; color: #4a7a99; line-height: 1.85;
       margin-bottom: 24px; text-align: center;
     }
     .verdict-text strong { color: #0cf2ff; }
 
     .action-btns { display: flex; flex-direction: column; gap: 10px; }
-    .retry-btn {
+    .primary-btn {
       background: linear-gradient(135deg, #0a3a5a, #0a2a5a);
       border: 1.5px solid #0cf2ff44;
       color: #0cf2ff;
@@ -287,120 +301,100 @@
       font-size: 16px; font-weight: 700; cursor: pointer;
       transition: all 0.2s; font-family: inherit;
     }
-    .retry-btn:hover { border-color: #0cf2ff; box-shadow: 0 4px 20px #0cf2ff22; transform: translateY(-2px); }
-    .share-btn {
-      background: #0a1828; color: #6a9abb;
+    .primary-btn:hover { border-color: #0cf2ff; box-shadow: 0 4px 20px #0cf2ff22; transform: translateY(-2px); }
+    .secondary-btn {
+      background: #0a1828; color: #4a7a99;
       border: 1.5px solid #1a3050;
       padding: 14px; border-radius: 14px;
       font-size: 15px; font-weight: 600; cursor: pointer;
       transition: all 0.2s; font-family: inherit;
     }
-    .share-btn:hover { border-color: #0cf2ff44; color: #cce8ff; }
+    .secondary-btn:hover { border-color: #0cf2ff44; color: #cce8ff; }
 
-    /* 공통 버튼 */
-    .primary-btn {
-      background: linear-gradient(135deg, #0a3a5a, #0a2a5a);
-      border: 1.5px solid #0cf2ff66;
-      color: #0cf2ff;
-      padding: 16px 48px; border-radius: 50px;
-      font-size: 17px; font-weight: 700; cursor: pointer;
-      transition: all 0.3s; font-family: inherit;
-      box-shadow: 0 6px 24px #0cf2ff22;
-    }
-    .primary-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 32px #0cf2ff44; border-color: #0cf2ff; }
-    .primary-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
+    /* ── TOAST ── */
     .toast {
       position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px);
-      background: #0c1e30; border: 1px solid #0cf2ff44; color: #0cf2ff;
+      background: #040f18; border: 1px solid #0cf2ff44; color: #0cf2ff;
       padding: 12px 24px; border-radius: 50px; font-size: 14px; font-weight: 600;
       z-index: 999; transition: transform 0.3s; pointer-events: none;
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
   </style>
-  <script type="text/javascript" src="//t1.kakaocdn.net/kas/static/ba.min.js" async></script>
 </head>
 <body>
 
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
+<div class="particles" id="particles"></div>
 
 <div class="container">
 
   <!-- INTRO -->
-  <div class="intro" id="intro">
-    <span class="icon">🧬</span>
-    <h1>내 MBTI 진짜 맞아?</h1>
-    <h2>행동 패턴으로 실제 MBTI 역추적</h2>
-    <p>
-      "나 INFP야"라고 말하는데...<br>
-      <strong>진짜 그렇게 행동해?</strong><br><br>
-      12개의 실제 행동 패턴 질문으로<br>
-      네가 주장하는 MBTI랑 맞는지 검증해줄게.
-    </p>
-    <button class="primary-btn" onclick="showClaim()">검증 시작하기 →</button>
+  <div id="screen-intro">
+    <div class="intro-card">
+      <span class="intro-icon">🧬</span>
+      <div class="intro-title">내 MBTI 진짜 맞아?</div>
+      <div class="intro-tagline">행동 패턴으로 실제 MBTI 역추적</div>
+      <div class="intro-desc">
+        "나 INFP야"라고 말하는데...<br>
+        <strong>진짜 그렇게 행동해?</strong><br><br>
+        12개의 실제 행동 패턴 질문으로<br>
+        네가 주장하는 MBTI랑 맞는지 검증해줄게.
+      </div>
+      <div class="intro-note">🔬 솔직하게 답해야 정확해</div>
+      <button class="start-btn" onclick="showClaim()">검증 시작하기 →</button>
+    </div>
   </div>
 
-  <!-- CLAIM: 본인 생각 MBTI 입력 -->
-  <div class="claim" id="claim">
-    <div class="claim-title">
+  <!-- CLAIM SCREEN -->
+  <div class="screen" id="screen-claim">
+    <div class="claim-card">
       <h2>네가 생각하는 MBTI가 뭐야?</h2>
       <p>각 차원에서 나라고 생각하는 쪽을 눌러봐</p>
-    </div>
-    <div class="mbti-card">
+
       <div class="dimension">
         <div class="dim-label">에너지 방향</div>
         <div class="toggle-row">
-          <button class="toggle-btn active" id="btn-E" onclick="selectDim('EI', 'E')">
-            <span class="t-letter">E</span>
-            <span class="t-name">외향형</span>
+          <button class="toggle-btn active" id="btn-E" onclick="selectDim('EI','E')">
+            <span class="t-letter">E</span><span class="t-name">외향형</span>
           </button>
           <div class="toggle-vs">vs</div>
-          <button class="toggle-btn" id="btn-I" onclick="selectDim('EI', 'I')">
-            <span class="t-letter">I</span>
-            <span class="t-name">내향형</span>
+          <button class="toggle-btn" id="btn-I" onclick="selectDim('EI','I')">
+            <span class="t-letter">I</span><span class="t-name">내향형</span>
           </button>
         </div>
       </div>
       <div class="dimension">
         <div class="dim-label">인식 방식</div>
         <div class="toggle-row">
-          <button class="toggle-btn active" id="btn-N" onclick="selectDim('NS', 'N')">
-            <span class="t-letter">N</span>
-            <span class="t-name">직관형</span>
+          <button class="toggle-btn active" id="btn-N" onclick="selectDim('NS','N')">
+            <span class="t-letter">N</span><span class="t-name">직관형</span>
           </button>
           <div class="toggle-vs">vs</div>
-          <button class="toggle-btn" id="btn-S" onclick="selectDim('NS', 'S')">
-            <span class="t-letter">S</span>
-            <span class="t-name">감각형</span>
+          <button class="toggle-btn" id="btn-S" onclick="selectDim('NS','S')">
+            <span class="t-letter">S</span><span class="t-name">감각형</span>
           </button>
         </div>
       </div>
       <div class="dimension">
         <div class="dim-label">판단 방식</div>
         <div class="toggle-row">
-          <button class="toggle-btn active" id="btn-T" onclick="selectDim('TF', 'T')">
-            <span class="t-letter">T</span>
-            <span class="t-name">사고형</span>
+          <button class="toggle-btn active" id="btn-T" onclick="selectDim('TF','T')">
+            <span class="t-letter">T</span><span class="t-name">사고형</span>
           </button>
           <div class="toggle-vs">vs</div>
-          <button class="toggle-btn" id="btn-F" onclick="selectDim('TF', 'F')">
-            <span class="t-letter">F</span>
-            <span class="t-name">감정형</span>
+          <button class="toggle-btn" id="btn-F" onclick="selectDim('TF','F')">
+            <span class="t-letter">F</span><span class="t-name">감정형</span>
           </button>
         </div>
       </div>
       <div class="dimension" style="margin-bottom:0">
         <div class="dim-label">생활 방식</div>
         <div class="toggle-row">
-          <button class="toggle-btn active" id="btn-J" onclick="selectDim('JP', 'J')">
-            <span class="t-letter">J</span>
-            <span class="t-name">판단형</span>
+          <button class="toggle-btn active" id="btn-J" onclick="selectDim('JP','J')">
+            <span class="t-letter">J</span><span class="t-name">판단형</span>
           </button>
           <div class="toggle-vs">vs</div>
-          <button class="toggle-btn" id="btn-P" onclick="selectDim('JP', 'P')">
-            <span class="t-letter">P</span>
-            <span class="t-name">인식형</span>
+          <button class="toggle-btn" id="btn-P" onclick="selectDim('JP','P')">
+            <span class="t-letter">P</span><span class="t-name">인식형</span>
           </button>
         </div>
       </div>
@@ -410,42 +404,31 @@
         <div class="mbti-preview-val" id="claimed-preview">ENTJ</div>
       </div>
     </div>
-
-    <div style="text-align:center; margin-top:24px">
-      <button class="primary-btn" onclick="startQuiz()">이대로 검증하기 →</button>
+    <div class="claim-submit">
+      <button class="start-btn" onclick="startQuiz()">이대로 검증하기 →</button>
     </div>
   </div>
 
   <!-- QUIZ -->
-  <div class="quiz" id="quiz">
-    <div class="progress-wrap">
-      <div class="progress-info">
-        <span class="progress-label">행동 패턴 분석 중</span>
-        <span class="progress-count" id="progress-count">1 / 12</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
-      </div>
-      <div class="dim-indicator">
-        <div class="dim-dot active" id="dot-0"></div>
-        <div class="dim-dot active" id="dot-1"></div>
-        <div class="dim-dot active" id="dot-2"></div>
-        <div class="dim-dot" id="dot-3"></div>
-        <div class="dim-dot" id="dot-4"></div>
-        <div class="dim-dot" id="dot-5"></div>
-        <div class="dim-dot" id="dot-6"></div>
-        <div class="dim-dot" id="dot-7"></div>
-        <div class="dim-dot" id="dot-8"></div>
-        <div class="dim-dot" id="dot-9"></div>
-        <div class="dim-dot" id="dot-10"></div>
-        <div class="dim-dot" id="dot-11"></div>
+  <div class="screen" id="screen-quiz">
+    <div class="quiz-header">
+      <button class="back-btn" id="back-btn" onclick="goBack()">←</button>
+      <div class="progress-wrap">
+        <div class="progress-info">
+          <span class="progress-label">🧬 행동 패턴 분석 중</span>
+          <span class="progress-count" id="progress-count">1 / 12</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+        <div class="dim-indicator" id="dim-indicator"></div>
       </div>
     </div>
     <div class="question-card" id="question-card"></div>
   </div>
 
   <!-- RESULT -->
-  <div class="result" id="result">
+  <div class="screen" id="screen-result">
     <div class="result-card" id="result-card"></div>
   </div>
 
@@ -454,163 +437,135 @@
 <div class="toast" id="toast">링크가 복사됐어! 🔗</div>
 
 <script>
-  // ─── 주장 MBTI ────────────────────────────────────────────────
+  // Particles
+  const PARTICLES = ['🧬','✨','💡','🔬','⚡','🌐','🔷'];
+  const pc = document.getElementById('particles');
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.textContent = PARTICLES[i % PARTICLES.length];
+    p.style.left = Math.random() * 100 + '%';
+    p.style.setProperty('--dur', (7 + Math.random() * 9) + 's');
+    p.style.setProperty('--delay', (Math.random() * 9) + 's');
+    p.style.fontSize = (10 + Math.random() * 10) + 'px';
+    pc.appendChild(p);
+  }
+
+  // ── CLAIMED MBTI ──
   const claimed = { EI: 'E', NS: 'N', TF: 'T', JP: 'J' };
 
   function selectDim(dim, val) {
     claimed[dim] = val;
     const pairs = { EI: ['E','I'], NS: ['N','S'], TF: ['T','F'], JP: ['J','P'] };
-    pairs[dim].forEach(v => {
-      document.getElementById('btn-' + v).classList.toggle('active', v === val);
-    });
-    updatePreview();
-  }
-
-  function updatePreview() {
-    document.getElementById('claimed-preview').textContent =
-      claimed.EI + claimed.NS + claimed.TF + claimed.JP;
+    pairs[dim].forEach(v => document.getElementById('btn-' + v).classList.toggle('active', v === val));
+    document.getElementById('claimed-preview').textContent = claimed.EI + claimed.NS + claimed.TF + claimed.JP;
   }
 
   function showClaim() {
-    document.getElementById('intro').style.display = 'none';
-    document.getElementById('claim').classList.add('active');
+    document.getElementById('screen-intro').style.display = 'none';
+    document.getElementById('screen-claim').classList.add('active');
   }
 
-  // ─── 질문 데이터 ───────────────────────────────────────────────
-  // dim: EI / NS / TF / JP, score: E/N/T/J = 1, I/S/F/P = 0
+  // ── QUESTIONS ──
   const questions = [
-    // E/I
-    {
-      emoji: '📱', dim: 'EI',
-      text: '주말에 약속, 보통 누가 먼저 잡아?',
+    { emoji: '📱', dim: 'EI', text: '주말에 약속, 보통 누가 먼저 잡아?',
       options: [
         { icon: '📞', text: '내가 먼저 연락해서 잡아', score: 1 },
         { icon: '🛋️', text: '상대방이 연락해야 움직여', score: 0 },
-      ]
-    },
-    {
-      emoji: '🏠', dim: 'EI',
-      text: '오래 혼자 있으면 어때?',
+      ]},
+    { emoji: '🏠', dim: 'EI', text: '오래 혼자 있으면 어때?',
       options: [
         { icon: '😮‍💨', text: '슬슬 답답해지고 누군가 보고 싶어', score: 1 },
-        { icon: '🔋', text: '오히려 충전되고 혼자가 편해', score: 0 },
-      ]
-    },
-    {
-      emoji: '👥', dim: 'EI',
-      text: '처음 보는 사람 많은 모임에서?',
+        { icon: '🔋',    text: '오히려 충전되고 혼자가 편해', score: 0 },
+      ]},
+    { emoji: '👥', dim: 'EI', text: '처음 보는 사람 많은 모임에서?',
       options: [
         { icon: '🗣️', text: '먼저 말 걸고 어울려', score: 1 },
-        { icon: '🧸', text: '아는 사람 옆에 있거나 조용히 관찰해', score: 0 },
-      ]
-    },
-    // N/S
-    {
-      emoji: '🗺️', dim: 'NS',
-      text: '여행 계획 세울 때?',
+        { icon: '🧸',  text: '아는 사람 옆에 있거나 조용히 관찰해', score: 0 },
+      ]},
+    { emoji: '🗺️', dim: 'NS', text: '여행 계획 세울 때?',
       options: [
         { icon: '🎲', text: '큰 그림만 잡고 현장에서 즉흥으로', score: 1 },
         { icon: '📋', text: '맛집, 일정 다 정해놔야 편해', score: 0 },
-      ]
-    },
-    {
-      emoji: '💭', dim: 'NS',
-      text: '대화할 때 자주 나오는 말?',
+      ]},
+    { emoji: '💭', dim: 'NS', text: '대화할 때 자주 나오는 말?',
       options: [
         { icon: '🌀', text: '"만약에~", "이런 상상 해봤어?"', score: 1 },
         { icon: '📌', text: '"실제로", "현실적으로", "진짜로"', score: 0 },
-      ]
-    },
-    {
-      emoji: '🔭', dim: 'NS',
-      text: '미래에 대해 생각할 때?',
+      ]},
+    { emoji: '🔭', dim: 'NS', text: '미래에 대해 생각할 때?',
       options: [
         { icon: '🌠', text: '5년 후 내 모습 상상하는 게 재밌어', score: 1 },
         { icon: '📅', text: '지금 당장 할 것에 더 집중해', score: 0 },
-      ]
-    },
-    // T/F
-    {
-      emoji: '🫂', dim: 'TF',
-      text: '친구가 고민 털어놓으면?',
+      ]},
+    { emoji: '🫂', dim: 'TF', text: '친구가 고민 털어놓으면?',
       options: [
         { icon: '🔧', text: '해결책이나 조언을 먼저 해줘', score: 1 },
         { icon: '💙', text: '"많이 힘들었겠다" 공감부터', score: 0 },
-      ]
-    },
-    {
-      emoji: '⚖️', dim: 'TF',
-      text: '중요한 결정 내릴 때?',
+      ]},
+    { emoji: '⚖️', dim: 'TF', text: '중요한 결정 내릴 때?',
       options: [
         { icon: '📊', text: '장단점 따지고 논리적으로 판단해', score: 1 },
         { icon: '🫀', text: '느낌이 맞으면 그걸로 결정해', score: 0 },
-      ]
-    },
-    {
-      emoji: '😤', dim: 'TF',
-      text: '친한 사람이 틀린 말을 하면?',
+      ]},
+    { emoji: '😤', dim: 'TF', text: '친한 사람이 틀린 말을 하면?',
       options: [
         { icon: '🎯', text: '틀린 건 틀렸다고 말해줘야 해', score: 1 },
         { icon: '🤐', text: '상처받을까봐 그냥 넘기거나 돌려 말해', score: 0 },
-      ]
-    },
-    // J/P
-    {
-      emoji: '⏰', dim: 'JP',
-      text: '마감이나 약속 관련해서?',
+      ]},
+    { emoji: '⏰', dim: 'JP', text: '마감이나 약속 관련해서?',
       options: [
         { icon: '✅', text: '미리미리 끝내야 마음이 편해', score: 1 },
         { icon: '⚡', text: '데드라인 직전에 오히려 집중 잘 돼', score: 0 },
-      ]
-    },
-    {
-      emoji: '🔀', dim: 'JP',
-      text: '갑자기 계획이 바뀌면?',
+      ]},
+    { emoji: '🔀', dim: 'JP', text: '갑자기 계획이 바뀌면?',
       options: [
         { icon: '😤', text: '당황스럽고 불편해', score: 1 },
         { icon: '🎉', text: '즉흥적인 거 오히려 재밌어', score: 0 },
-      ]
-    },
-    {
-      emoji: '🎛️', dim: 'JP',
-      text: '결정을 내리는 스타일은?',
+      ]},
+    { emoji: '🎛️', dim: 'JP', text: '결정을 내리는 스타일은?',
       options: [
         { icon: '🏁', text: '빨리 결정하고 다음으로 넘어가고 싶어', score: 1 },
         { icon: '🌊', text: '마지막까지 선택지 열어두다가 결정해', score: 0 },
-      ]
-    },
+      ]},
   ];
 
-  // ─── MBTI 설명 ─────────────────────────────────────────────────
   const mbtiInfo = {
-    INTJ: { nickname: '전략가', desc: '머릿속에 이미 다 계획돼 있어. 비효율적인 거 못 참는 독립적인 전략가.' },
-    INTP: { nickname: '논리술사', desc: '왜? 왜? 왜? 의 연속. 뭐든 분석하고 이론화해야 직성이 풀려.' },
-    ENTJ: { nickname: '통솔자', desc: '타고난 보스 기질. 비효율 보이면 바로 개선하러 달려가.' },
-    ENTP: { nickname: '변론가', desc: '아이디어 뱅크. 반론을 즐기고 토론에서 살아나.' },
-    INFJ: { nickname: '옹호자', desc: '사람 마음을 꿰뚫어봐. 조용하지만 강한 신념이 있어.' },
-    INFP: { nickname: '중재자', desc: '이상주의자. 세상을 더 좋게 만들고 싶은 감성 충만형.' },
-    ENFJ: { nickname: '선도자', desc: '천생 리더. 모두를 이끌고 싶어하는 사람 중심형.' },
-    ENFP: { nickname: '활동가', desc: '열정 덩어리. 가능성을 보고 사람에게서 에너지를 얻어.' },
-    ISTJ: { nickname: '현실주의자', desc: '신뢰의 아이콘. 책임감이 뭔지 온몸으로 보여줘.' },
-    ISFJ: { nickname: '수호자', desc: '조용한 수호자. 남 챙기는 게 자연스럽게 몸에 배어 있어.' },
-    ESTJ: { nickname: '관리자', desc: '현실주의 관리자. 원칙과 질서가 있어야 해.' },
-    ESFJ: { nickname: '집정관', desc: '모두의 친구. 분위기를 살피고 사람들을 챙기는 게 특기야.' },
-    ISTP: { nickname: '장인', desc: '조용한 장인. 실용적이고 손으로 하는 건 다 잘해.' },
-    ISFP: { nickname: '모험가', desc: '자유로운 예술가. 나만의 감성과 페이스가 있어.' },
-    ESTP: { nickname: '사업가', desc: '행동파. 생각보다 몸이 먼저 나가는 현장주의자.' },
-    ESFP: { nickname: '연예인', desc: '현재를 즐겨. 어딜 가든 분위기 메이커야.' },
+    INTJ: { nickname: '전략가',    desc: '머릿속에 이미 다 계획돼 있어. 비효율적인 거 못 참는 독립적인 전략가.' },
+    INTP: { nickname: '논리술사',  desc: '왜? 왜? 왜? 의 연속. 뭐든 분석하고 이론화해야 직성이 풀려.' },
+    ENTJ: { nickname: '통솔자',    desc: '타고난 보스 기질. 비효율 보이면 바로 개선하러 달려가.' },
+    ENTP: { nickname: '변론가',    desc: '아이디어 뱅크. 반론을 즐기고 토론에서 살아나.' },
+    INFJ: { nickname: '옹호자',    desc: '사람 마음을 꿰뚫어봐. 조용하지만 강한 신념이 있어.' },
+    INFP: { nickname: '중재자',    desc: '이상주의자. 세상을 더 좋게 만들고 싶은 감성 충만형.' },
+    ENFJ: { nickname: '선도자',    desc: '천생 리더. 모두를 이끌고 싶어하는 사람 중심형.' },
+    ENFP: { nickname: '활동가',    desc: '열정 덩어리. 가능성을 보고 사람에게서 에너지를 얻어.' },
+    ISTJ: { nickname: '현실주의자',desc: '신뢰의 아이콘. 책임감이 뭔지 온몸으로 보여줘.' },
+    ISFJ: { nickname: '수호자',    desc: '조용한 수호자. 남 챙기는 게 자연스럽게 몸에 배어 있어.' },
+    ESTJ: { nickname: '관리자',    desc: '현실주의 관리자. 원칙과 질서가 있어야 해.' },
+    ESFJ: { nickname: '집정관',    desc: '모두의 친구. 분위기를 살피고 사람들을 챙기는 게 특기야.' },
+    ISTP: { nickname: '장인',      desc: '조용한 장인. 실용적이고 손으로 하는 건 다 잘해.' },
+    ISFP: { nickname: '모험가',    desc: '자유로운 예술가. 나만의 감성과 페이스가 있어.' },
+    ESTP: { nickname: '사업가',    desc: '행동파. 생각보다 몸이 먼저 나가는 현장주의자.' },
+    ESFP: { nickname: '연예인',    desc: '현재를 즐겨. 어딜 가든 분위기 메이커야.' },
   };
 
-  // ─── 퀴즈 진행 ─────────────────────────────────────────────────
+  // ── QUIZ STATE ──
   let current = 0;
+  let answers = [];
   const dimScores = { EI: 0, NS: 0, TF: 0, JP: 0 };
   const dimCounts = { EI: 0, NS: 0, TF: 0, JP: 0 };
 
+  function buildDimIndicator() {
+    const wrap = document.getElementById('dim-indicator');
+    wrap.innerHTML = questions.map((_, i) => `<div class="dim-dot" id="dot-${i}"></div>`).join('');
+  }
+
   function startQuiz() {
-    document.getElementById('claim').classList.remove('active');
-    document.getElementById('quiz').classList.add('active');
-    current = 0;
+    document.getElementById('screen-claim').classList.remove('active');
+    document.getElementById('screen-quiz').classList.add('active');
+    current = 0; answers = [];
     Object.keys(dimScores).forEach(k => { dimScores[k] = 0; dimCounts[k] = 0; });
+    buildDimIndicator();
     renderQuestion(0);
   }
 
@@ -619,74 +574,72 @@
     const pct = (idx / questions.length) * 100;
     document.getElementById('progress-fill').style.width = pct + '%';
     document.getElementById('progress-count').textContent = `${idx + 1} / ${questions.length}`;
+    document.getElementById('back-btn').disabled = idx === 0;
 
-    // dim dots
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < questions.length; i++) {
       const dot = document.getElementById('dot-' + i);
-      if (i < idx) dot.className = 'dim-dot done';
+      if (!dot) continue;
+      if (i < idx)      dot.className = 'dim-dot done';
       else if (i === idx) dot.className = 'dim-dot active';
-      else dot.className = 'dim-dot';
+      else               dot.className = 'dim-dot';
     }
 
     const card = document.getElementById('question-card');
+    card.style.animation = 'none'; card.offsetHeight; card.style.animation = '';
     card.innerHTML = `
       <span class="q-emoji">${q.emoji}</span>
       <div class="q-num">질문 ${idx + 1}</div>
       <div class="q-text">${q.text}</div>
       <div class="options">
-        ${q.options.map((opt, i) => `
-          <button class="option-btn" onclick="selectOption(${i}, ${opt.score}, '${q.dim}')">
-            <span class="option-icon">${opt.icon}</span>
-            <span>${opt.text}</span>
-          </button>
-        `).join('')}
-      </div>
-    `;
+        ${q.options.map((o, i) => `
+          <button class="option-btn" onclick="selectOption(${i}, ${o.score}, '${q.dim}')">
+            <span class="option-icon">${o.icon}</span>
+            <span>${o.text}</span>
+          </button>`).join('')}
+      </div>`;
   }
 
   function selectOption(optIdx, score, dim) {
-    const btns = document.querySelectorAll('.option-btn');
-    btns.forEach(b => b.style.pointerEvents = 'none');
-    btns[optIdx].classList.add('selected');
-
+    document.querySelectorAll('.option-btn').forEach(b => b.style.pointerEvents = 'none');
+    document.querySelectorAll('.option-btn')[optIdx].classList.add('selected');
+    answers[current] = { dim, score };
     dimScores[dim] += score;
     dimCounts[dim]++;
-
     setTimeout(() => {
       current++;
-      if (current < questions.length) {
-        const card = document.getElementById('question-card');
-        card.style.opacity = '0';
-        card.style.transform = 'translateX(-20px)';
-        card.style.transition = 'all 0.2s';
-        setTimeout(() => {
-          card.style.transition = '';
-          card.style.opacity = '';
-          card.style.transform = '';
-          renderQuestion(current);
-        }, 200);
-      } else {
-        showResult();
-      }
-    }, 400);
+      if (current < questions.length) renderQuestion(current);
+      else showResult();
+    }, 380);
   }
 
-  // ─── 결과 ──────────────────────────────────────────────────────
-  function showResult() {
-    document.getElementById('quiz').classList.remove('active');
-    document.getElementById('result').classList.add('active');
+  function goBack() {
+    if (current === 0) {
+      document.getElementById('screen-quiz').classList.remove('active');
+      document.getElementById('screen-claim').classList.add('active');
+    } else {
+      const prev = answers[current - 1];
+      dimScores[prev.dim] -= prev.score;
+      dimCounts[prev.dim]--;
+      answers.length = current - 1;
+      current--;
+      renderQuestion(current);
+    }
+  }
 
-    // 실제 MBTI 계산 (점수 > count/2 이면 E/N/T/J)
+  // ── RESULT ──
+  function showResult() {
+    document.getElementById('screen-quiz').classList.remove('active');
+    document.getElementById('screen-result').classList.add('active');
+
     const actual = {
       EI: dimScores.EI >= dimCounts.EI / 2 ? 'E' : 'I',
       NS: dimScores.NS >= dimCounts.NS / 2 ? 'N' : 'S',
       TF: dimScores.TF >= dimCounts.TF / 2 ? 'T' : 'F',
       JP: dimScores.JP >= dimCounts.JP / 2 ? 'J' : 'P',
     };
-    const actualType = actual.EI + actual.NS + actual.TF + actual.JP;
+    const actualType  = actual.EI + actual.NS + actual.TF + actual.JP;
     const claimedType = claimed.EI + claimed.NS + claimed.TF + claimed.JP;
 
-    // 차원별 일치 여부
     const dimMatch = {
       EI: claimed.EI === actual.EI,
       NS: claimed.NS === actual.NS,
@@ -695,13 +648,17 @@
     };
     const matchCount = Object.values(dimMatch).filter(Boolean).length;
 
-    // 판정
     const verdicts = [
-      { emoji: '🤯', badge: '완전 다른 사람', color: '#f87171', text: `"${claimedType}"이라고 했는데 행동은 <strong>완전 딴 사람</strong>이야.<br>MBTI 재검사 강력 권고.` },
-      { emoji: '🫤', badge: '많이 다른데', color: '#fb923c', text: `4개 중 1개만 맞아. 자기 인식이랑 실제 행동 사이에<br><strong>꽤 큰 갭</strong>이 있어.` },
-      { emoji: '🤔', badge: '반반이야', color: '#fbbf24', text: `딱 반이 맞았어. <strong>자기 인식과 현실의 중간 어딘가</strong>에 있는 것 같아.` },
-      { emoji: '😌', badge: '거의 맞네', color: '#34d399', text: `한 글자만 달라. 대부분의 행동이 "${claimedType}"에 부합해.<br><strong>꽤 자기 자신을 잘 알고 있어.</strong>` },
-      { emoji: '🎯', badge: '완전 일치', color: '#0cf2ff', text: `행동 패턴이 "${claimedType}"과 <strong>정확히 일치</strong>해.<br>MBTI 책 쓰겠다.` },
+      { emoji: '🤯', badge: '완전 다른 사람', color: '#f87171',
+        text: `"${claimedType}"이라고 했는데 행동은 <strong>완전 딴 사람</strong>이야.<br>MBTI 재검사 강력 권고.` },
+      { emoji: '🫤', badge: '많이 다른데',   color: '#fb923c',
+        text: `4개 중 1개만 맞아. 자기 인식이랑 실제 행동 사이에<br><strong>꽤 큰 갭</strong>이 있어.` },
+      { emoji: '🤔', badge: '반반이야',      color: '#fbbf24',
+        text: `딱 반이 맞았어. <strong>자기 인식과 현실의 중간 어딘가</strong>에 있는 것 같아.` },
+      { emoji: '😌', badge: '거의 맞네',     color: '#34d399',
+        text: `한 글자만 달라. 대부분의 행동이 "${claimedType}"에 부합해.<br><strong>꽤 자기 자신을 잘 알고 있어.</strong>` },
+      { emoji: '🎯', badge: '완전 일치',     color: '#0cf2ff',
+        text: `행동 패턴이 "${claimedType}"과 <strong>정확히 일치</strong>해.<br>MBTI 책 쓰겠다.` },
     ];
     const v = verdicts[matchCount];
 
@@ -711,17 +668,16 @@
         <div class="dr-dim">${dimLabels[dim]}</div>
         <div class="dr-letters">${claimed[dim]} → ${actual[dim]}</div>
         <div class="dr-match">${match ? '✓ 일치' : '✗ 불일치'}</div>
-      </div>
-    `).join('');
+      </div>`).join('');
 
     const info = mbtiInfo[actualType];
-    const card = document.getElementById('result-card');
-    card.innerHTML = `
-      <div class="result-header">
+    document.getElementById('result-card').innerHTML = `
+      <div class="result-hero">
         <span class="result-emoji">${v.emoji}</span>
-        <div class="verdict-badge" style="background:${v.color}22; color:${v.color}">${v.badge} (${matchCount}/4 일치)</div>
+        <div class="verdict-badge" style="background:${v.color}22; color:${v.color}; border:1px solid ${v.color}33">
+          ${v.badge} (${matchCount}/4 일치)
+        </div>
       </div>
-
       <div class="mbti-compare">
         <div class="mbti-box">
           <div class="mbti-box-label">내가 생각한 MBTI</div>
@@ -733,35 +689,32 @@
           <div class="mbti-box-val actual">${actualType}</div>
         </div>
       </div>
-
       <div class="dim-results">${dimBoxes}</div>
-
       <div class="mbti-desc">
         <div class="mbti-desc-title">행동으로 드러난 실제 유형 · ${actualType}</div>
         <div class="mbti-desc-nickname">${info.nickname}</div>
         <div class="mbti-desc-text">${info.desc}</div>
       </div>
-
       <div class="verdict-text">${v.text}</div>
-
-      <div style="text-align:center;margin:24px 0 8px">
+      <div style="text-align:center;margin:0 0 20px">
         <ins class="kakao_ad_area" style="display:none;"
           data-ad-unit="DAN-PVu656ucRpjzw2zW"
           data-ad-width="320"
           data-ad-height="50"></ins>
       </div>
       <div class="action-btns">
-        <button class="retry-btn" onclick="retry()">🔄 다시 해보기</button>
-        <button class="share-btn" onclick="shareResult()">🔗 결과 공유하기</button>
-      </div>
-    `;
+        <button class="primary-btn" onclick="retry()">🔄 다시 해보기</button>
+        <button class="secondary-btn" onclick="shareResult()">🔗 결과 공유하기</button>
+      </div>`;
+
+    if (matchCount === 4) launchConfetti();
   }
 
   function retry() {
-    current = 0;
+    current = 0; answers = [];
     Object.keys(dimScores).forEach(k => { dimScores[k] = 0; dimCounts[k] = 0; });
-    document.getElementById('result').classList.remove('active');
-    document.getElementById('intro').style.display = '';
+    document.getElementById('screen-result').classList.remove('active');
+    document.getElementById('screen-intro').style.display = '';
   }
 
   function shareResult() {
@@ -771,6 +724,26 @@
       setTimeout(() => t.classList.remove('show'), 2500);
     });
   }
+
+  function launchConfetti() {
+    const colors = ['#0cf2ff','#38bdf8','#7dd3fc','#0ea5e9','#a5f3fc','#fbbf24'];
+    for (let i = 0; i < 70; i++) {
+      setTimeout(() => {
+        const c = document.createElement('div');
+        const size = 6 + Math.random() * 7;
+        c.style.cssText = `
+          position:fixed; pointer-events:none; z-index:100;
+          left:${Math.random() * 100}vw; top:-12px;
+          width:${size}px; height:${size}px;
+          background:${colors[Math.floor(Math.random() * colors.length)]};
+          border-radius:${Math.random() > 0.5 ? '50%' : '2px'};
+          animation:confettiFall ${1.5 + Math.random() * 2}s ease-in forwards;`;
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 4000);
+      }, i * 35);
+    }
+  }
 </script>
+<script async src="//t1.kakaocdn.net/kas/static/ba.min.js" charset="utf-8"></script>
 </body>
 </html>
